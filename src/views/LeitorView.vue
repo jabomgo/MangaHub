@@ -4,6 +4,10 @@
 
 <template>
   <div>
-    <p>Home view</p>
+    <p>Leitor View</p>
   </div>
 </template>
+
+<style scoped>
+
+</style>
