@@ -9,8 +9,7 @@
     "preview": "vite preview",
     "test:unit": "vitest",
     "lint": "eslint . --fix",
-    "format": "prettier --write src/",
-    "prepare": "husky"
+    "format": "prettier --write src/"
   },
   "dependencies": {
     "pinia": "^3.0.1",
