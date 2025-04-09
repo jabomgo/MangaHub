@@ -1,5 +1,5 @@
 <script setup>
-import "primeicons/primeicons.css";
+import 'primeicons/primeicons.css'
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 </script>
