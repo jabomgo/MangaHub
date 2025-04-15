@@ -1,37 +1,51 @@
 import axios from 'axios'
 
-const uploadMangaDex = axios.create({
-  baseURL: 'https://uploads.mangadex.org',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
+class axiosMangaDex {
+  constructor() {
+    this.uploadMangaDex = axios.create({
+      baseURL: 'https://uploads.mangadex.org',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-const apiMangaDex = axios.create({
-  baseURL: 'https://api.mangadex.org',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-})
+    this.apiMangaDex = axios.create({
+      baseURL: 'https://api.mangadex.org',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  }
 
-apiMangaDex.getHomeTitles = async function () {
-  const response = await this.get('/manga')
-  return response.data
+  async searchManga(title){
+    try{
+      const response = await this.apiMangaDex.get(`/manga?title=${title}`)
+      return response.data
+    } catch(error){
+      console.error("Erro ao buscar manga:", error)
+      throw error
+    }
+  }
+
+  async getFileCover(coveId) {
+    try{
+      const response = await this.apiMangaDex.get(`/cover/${coveId}`)
+      return response.data
+    } catch(error){
+      console.error("Erro ao obter coverID:", error)
+      throw error
+    }
+  }
+
+  async getCoverArt(mangaId, fileName) {
+    try{
+      const response = await this.uploadMangaDex.get(`/covers/${mangaId}/${fileName}`, {responseType: 'blob'})
+      return response.data
+    } catch(error){
+      console.error("Erro ao obter imagem da capa:", error)
+      throw error
+    }
+  }
 }
 
-apiMangaDex.SearchManga = async function (title) {
-  const response = await this.get(`/manga?title=${title}`)
-  return response.data
-}
-
-apiMangaDex.getFileCover = async function (coverId) {
-  const response = await this.get(`/cover/${coverId}`)
-  return response.data
-}
-
-uploadMangaDex.getCoverArt = async function (idManga, fileName) {
-  const response = await this.get(`/covers/${idManga}/${fileName}`)
-  return response.data
-}
-
-export default {apiMangaDex, uploadMangaDex}
+export default new axiosMangaDex();
