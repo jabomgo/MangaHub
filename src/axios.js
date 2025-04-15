@@ -17,7 +17,11 @@ class axiosMangaDex {
     })
   }
 
-  // Requisisão que retorna mangas pesquisado pelo capítulo
+  /**
+   * Requisição que retorna mangás pesquisados pelo título.
+   * @param {string} title - O título do mangá a ser buscado.
+   * @returns {Promise<Object>} Os dados do mangá retornados pela API.
+   */
   async searchManga(title) {
     try {
       const response = await this.apiMangaDex.get(`/manga?title=${title}`)
@@ -28,7 +32,11 @@ class axiosMangaDex {
     }
   }
 
-  // Requisição para pegar fileName do manga
+  /**
+   * Requisição para pegar os dados de um cover usando seu ID.
+   * @param {string} coveId - O ID do cover do mangá.
+   * @returns {Promise<Object>} Os dados do cover retornados pela API.
+   */
   async getFileCover(coveId) {
     try {
       const response = await this.apiMangaDex.get(`/cover/${coveId}`)
@@ -39,7 +47,12 @@ class axiosMangaDex {
     }
   }
 
-  // Requisição para pegar imagem de capa do manga
+  /**
+   * Requisição para pegar a imagem da capa do mangá.
+   * @param {string} mangaId - O ID do mangá.
+   * @param {string} fileName - O nome do arquivo da capa.
+   * @returns {Promise<string>} A URL temporária da imagem da capa.
+   */
   async getCoverArt(mangaId, fileName) {
     try {
       const response = await this.uploadMangaDex.get(`/covers/${mangaId}/${fileName}`, {
@@ -53,7 +66,12 @@ class axiosMangaDex {
     }
   }
 
-  // Requisição para pegar todos ids dos volumes e capítulos disponíveis. Obs: Não necessáriamente em Pt-br
+  /**
+   * Requisição para pegar todos os IDs dos volumes e capítulos disponíveis.
+   * Obs: Nem todos podem estar traduzidos para o português.
+   * @param {string} mangaId - O ID do mangá.
+   * @returns {Promise<Object>} Dados agregados dos volumes e capítulos.
+   */
   async getCapterVolume(mangaId) {
     try {
       const response = await this.apiMangaDex.get(`/manga/${mangaId}/aggregate`)
@@ -64,7 +82,11 @@ class axiosMangaDex {
     }
   }
 
-  // Requisição para pegar as URLs das páginas de capítulo escolhido
+  /**
+   * Requisição para pegar as URLs das páginas do capítulo escolhido.
+   * @param {string} capterId - O ID do capítulo.
+   * @returns {Promise<Object>} Dados do servidor com as páginas do capítulo.
+   */
   async getCapterPage(capterId) {
     try {
       const response = await this.apiMangaDex.get(`/at-home/server/${capterId}`)
@@ -75,7 +97,12 @@ class axiosMangaDex {
     }
   }
 
-  // Requisição para pegar imagem do capítulo do manga
+  /**
+   * Requisição para pegar a imagem de uma página do capítulo.
+   * @param {string} pageId - O nome do arquivo da página.
+   * @param {string} hashId - O hash do capítulo.
+   * @returns {Promise<string>} A URL temporária da imagem da página.
+   */
   async getImagePage(pageId, hashId) {
     try {
       const response = await this.uploadMangaDex.get(`/data/${hashId}/${pageId}`, {
@@ -89,11 +116,16 @@ class axiosMangaDex {
     }
   }
 
-  // Requisição para pegar os volumes e capitulos em uma língua especifica
+  /**
+   * Requisição para pegar os volumes e capítulos em uma língua específica.
+   * @param {string} mangaId - O ID do mangá.
+   * @param {string} idioma - O código da língua (ex: 'pt-br').
+   * @returns {Promise<Object>} Feed com os capítulos traduzidos na língua escolhida.
+   */
   async getCapterVolumeForLangage(mangaId, idioma) {
     try {
       const response = await this.apiMangaDex.get(
-        `/manga/${mangaId}//feed?translatedLanguage[]=${idioma}`,
+        `/manga/${mangaId}/feed?translatedLanguage[]=${idioma}`,
       )
       return response.data
     } catch (error) {
