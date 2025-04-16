@@ -7,14 +7,15 @@ import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
 
 // importar os componentes primevue aqui
-import Button from "primevue/button";
-import Checkbox from "primevue/checkbox";
-import SpeedDial from "primevue/speeddial";
-import Toast from "primevue/toast";
-import Badge from "primevue/badge";
-import Avatar from "primevue/avatar";
-import InputText from "primevue/inputtext";
-import Menubar from "primevue/menubar";
+import Button from 'primevue/button'
+import Checkbox from 'primevue/checkbox';
+import SpeedDial from 'primevue/speeddial';
+import Toast from 'primevue/toast';
+import Badge from 'primevue/badge';
+import Avatar from 'primevue/avatar';
+import InputText from 'primevue/inputtext';
+import Menubar from 'primevue/menubar';
+import Card from 'primevue/card';
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 
@@ -37,15 +38,16 @@ app.use(router);
 app.directive("ripple", Ripple);
 
 // Chamar os componentes do primevue aqui Ex:
-app.component("Button", Button);
-app.component("Checkbox", Checkbox);
-app.component("SpeedDial", SpeedDial);
-app.component("Toast", Toast);
-app.component("Badge", Badge);
-app.component("Avatar", Avatar);
-app.component("InputText", InputText);
-app.component("Menubar", Menubar);
-app.component("DataTable", DataTable);
-app.component("Column", Column);
+app.component('Button', Button)
+app.component('Checkbox', Checkbox)
+app.component('SpeedDial', SpeedDial)
+app.component('Toast', Toast)
+app.component('Badge', Badge)
+app.component('Avatar', Avatar)
+app.component('InputText', InputText)
+app.component('Menubar', Menubar)
+app.component('Card', Card)
+app.component('DataTable', DataTable)
+app.component('Column', Column)
 
 app.mount("#app");
