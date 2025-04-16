@@ -9,7 +9,7 @@ const resultado_pesquisa = ref([]);
 const pesquisaInput = ref("");
 const pesquisandoTitle = ref("");
 const limiteDePesquisa = ref(20);
-const loading = ref(true);
+const loading = ref(false);
 const total = ref(0);
 
 const pesquisarMangas = async () => {
@@ -32,7 +32,15 @@ onMounted(() => {
 });
 
 function getTitle(manga) {
-  return manga.attributes?.title?.en ?? "Sem título";
+  const ptBrTitle = manga.attributes.altTitles.find((titulo) => titulo["pt-br"])?.["pt-br"];
+
+  const enTitle = manga.attributes?.title?.en;
+
+  if (ptBrTitle && enTitle) {
+    return `${ptBrTitle} || ${enTitle}`;
+  }
+
+  return ptBrTitle || enTitle || "Sem título";
 }
 
 function getGenres(manga) {
@@ -65,9 +73,10 @@ function getLink(data) {
       stripedRows
       :loading="loading"
       responsiveLayout="scroll"
+      showGridlines
     >
-      <Column header="Título" :field="getTitle" />
-      <Column header="Ano" field="attributes.year" />
+      <Column header="Título" :field="getTitle" sortable />
+      <Column header="Ano" field="attributes.year" sortable />
       <Column header="Status" field="attributes.status" />
       <Column header="Gêneros" :field="getGenres" />
       <Column header="Conteúdo original">
@@ -82,7 +91,7 @@ function getLink(data) {
           <Button
             label="Ir"
             icon="pi pi-book"
-            @click="router.push({ name: 'capitulos', query: { mangaId: data.id } })"
+            @click="router.push({ name: 'capitulos', query: { manga: data.id } })"
           />
         </template>
       </Column>
