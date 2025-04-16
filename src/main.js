@@ -15,6 +15,8 @@ import Badge from 'primevue/badge';
 import Avatar from 'primevue/avatar';
 import InputText from 'primevue/inputtext';
 import Menubar from 'primevue/menubar';
+import Card from 'primevue/card';
+
 
 import App from './App.vue'
 import router from './router'
@@ -43,6 +45,7 @@ app.component('Badge', Badge)
 app.component('Avatar', Avatar)
 app.component('InputText', InputText)
 app.component('Menubar', Menubar)
+app.component('Card', Card)
 
 
 app.mount('#app')
