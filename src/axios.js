@@ -59,11 +59,14 @@ class axiosMangaDex {
    */
   async getCoverArt(mangaId, fileName, width) {
     try {
-      const response = await this.uploadMangaDex.get(`/covers/${mangaId}/${fileName}.${width}.jpg`, {
-        responseType: 'blob',
-      })
-      const coverUrl = URL.createObjectURL(response.data)
-      return coverUrl
+      const response = await this.uploadMangaDex.get(
+        `/covers/${mangaId}/${fileName}.${width}.jpg`,
+        {
+          responseType: "blob",
+        },
+      );
+      const coverUrl = URL.createObjectURL(response.data);
+      return coverUrl;
     } catch (error) {
       console.error("Erro ao obter imagem da capa:", error);
       throw error;
