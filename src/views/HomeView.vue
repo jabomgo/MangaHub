@@ -12,7 +12,7 @@ onMounted(async () => {
 
   mangaInfo.value = mangasExplorar.map(manga => ({
     id: manga.id,
-    title: manga.attributes.title.en,
+    title: manga.attributes?.title?.en || manga.attributes?.altTitles?.["pt-br"] || manga.attributes?.altTitles?.en   ||"Sem título",
     description: manga.attributes.description.en,
     coverId: manga.relationships?.find(rel => rel.type == 'cover_art')?.id,
   }))
@@ -20,9 +20,6 @@ onMounted(async () => {
   await fetchCoverFileNames();
   await fetchUrlImage();
 
-  mangaInfo.value.forEach(url => {
-    console.log("url: ",url.Url)
-  })
 })
 
 const fetchCoverFileNames = async () => {
@@ -44,9 +41,6 @@ const fetchUrlImage = async () => {
     const cover = coverFileNames.value[i]
     const manga = mangaInfo.value[i]
 
-    // console.log(manga.id)
-    // console.log(cover.fileName)
-
     if(manga.coverId){
       const Url = await axiosMangaDex.getCoverArt(manga.id, cover.fileName, 256)
       //  console.log(Url)
@@ -61,38 +55,20 @@ const fetchUrlImage = async () => {
   <div class="flex">
     <p>Explorar</p>
 
-    <div v-if="!loading">
+    <div v-if="!loading" class="card-list">
 
-      <Card v-for="(item, index) in mangaInfo" :key="index" style="width: 25rem; overflow: hidden" class="mb-3">
+      <Card v-for="(item, index) in mangaInfo" :key="index" style="width: 20rem; box-sizing:content-box; margin: 0.5px; overflow:hidden" class="mb-3">
 
         <!-- Header com a imagem do manga -->
-        <template #header>
-          <img v-if="item.Url" :src="item.Url" alt="cover_art" />
-          <div v-else class="manga-image-placeholder">Carregando...</div>
+        <template #content>
+          <div class="image-container">
+            <img v-if="item.Url" :src="item.Url" alt="cover_art" class="card-image"/>
+          </div>
+
         </template>
 
         <!-- Título do manga -->
-        <template #title>{{ item.title }}</template>
-
-        <!-- Subtítulo ou descrição adicional -->
-        <template #subtitle>
-          <p>{{ item.description }}</p>
-        </template>
-
-        <!-- Conteúdo adicional (se necessário)
-        <template #content>
-          <p class="m-0">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!
-          </p>
-        </template> -->
-
-        <!-- Footer com botões de ação -->
-        <template #footer>
-          <div class="flex gap-4 mt-1">
-            <Button label="Cancel" severity="secondary" outlined class="w-full" />
-            <Button label="Save" class="w-full" />
-          </div>
-        </template>
+        <template #footer>{{ item.title }}</template>
 
       </Card>
 
@@ -100,3 +76,26 @@ const fetchUrlImage = async () => {
 
   </div>
 </template>
+
+<style scoped>
+.card-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+
+}
+
+.image-container {
+  display: flex; /* Usando flexbox para centralizar a imagem */
+  justify-content: center;
+  align-items: center;
+  height: 370px; /* Definindo uma altura fixa para as imagens */
+}
+
+.card-image {
+  width: 100%;
+  height: 100%;
+  object-fit:cover;
+  border-radius: 8px;
+}
+</style>
