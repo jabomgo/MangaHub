@@ -16,7 +16,8 @@ import Avatar from 'primevue/avatar';
 import InputText from 'primevue/inputtext';
 import Menubar from 'primevue/menubar';
 import Card from 'primevue/card';
-
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
 
 import App from "./App.vue";
 import router from "./router";
@@ -46,5 +47,7 @@ app.component('Avatar', Avatar)
 app.component('InputText', InputText)
 app.component('Menubar', Menubar)
 app.component('Card', Card)
+app.component('DataTable', DataTable)
+app.component('Column', Column)
 
 app.mount("#app");
