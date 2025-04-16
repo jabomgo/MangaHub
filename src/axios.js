@@ -21,12 +21,13 @@ class axiosMangaDex {
    * Requisição que retorna mangás pesquisados pelo título.
    * @param {string} title - O título do mangá a ser buscado.
    * @param {float} [limite=10] - Limite de quantos serão pesquisados (valor padrão é 10).
+   * @param {number} [offset=0] - O número de páginas a ser usado para controle de offset de páginação (valor padrão é 0).
    * @returns {Promise<Object>} Os dados do mangá retornados pela API.
    */
-  async searchManga(title, limite = 10) {
+  async searchManga(title, limite = 10, offset = 0) {
     try {
       const response = await this.apiMangaDex.get(`/manga?title=${title}`, {
-        params: { limit: limite },
+        params: { limit: limite, offset: offset },
       });
       return response.data;
     } catch (error) {
