@@ -1,10 +1,10 @@
-import './assets/main.css'
+import "./assets/main.css";
 
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
 
-import PrimeVue from 'primevue/config'
-import Aura from '@primeuix/themes/aura'
+import PrimeVue from "primevue/config";
+import Aura from "@primeuix/themes/aura";
 
 // importar os componentes primevue aqui
 import Button from 'primevue/button'
@@ -18,23 +18,23 @@ import Menubar from 'primevue/menubar';
 import Card from 'primevue/card';
 
 
-import App from './App.vue'
-import router from './router'
-import Ripple from 'primevue/ripple'
+import App from "./App.vue";
+import router from "./router";
+import Ripple from "primevue/ripple";
 
-const app = createApp(App)
+const app = createApp(App);
 
 app.use(PrimeVue, {
   theme: {
     preset: Aura,
   },
-  ripple: true
-})
+  ripple: true,
+});
 
-app.use(createPinia())
-app.use(router)
+app.use(createPinia());
+app.use(router);
 
-app.directive('ripple', Ripple);
+app.directive("ripple", Ripple);
 
 // Chamar os componentes do primevue aqui Ex:
 app.component('Button', Button)
@@ -47,5 +47,4 @@ app.component('InputText', InputText)
 app.component('Menubar', Menubar)
 app.component('Card', Card)
 
-
-app.mount('#app')
+app.mount("#app");

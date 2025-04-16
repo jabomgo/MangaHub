@@ -1,34 +1,38 @@
-import axios from 'axios'
+import axios from "axios";
 
 class axiosMangaDex {
   constructor() {
     this.uploadMangaDex = axios.create({
-      baseURL: 'https://uploads.mangadex.org',
+      baseURL: "https://uploads.mangadex.org",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    })
+    });
 
     this.apiMangaDex = axios.create({
-      baseURL: 'https://api.mangadex.org',
+      baseURL: "https://api.mangadex.org",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-    })
+    });
   }
 
   /**
    * Requisição que retorna mangás pesquisados pelo título.
    * @param {string} title - O título do mangá a ser buscado.
+   * @param {float} [limite=10] - Limite de quantos serão pesquisados (valor padrão é 10).
+   * @param {number} [offset=0] - O número de páginas a ser usado para controle de offset de páginação (valor padrão é 0).
    * @returns {Promise<Object>} Os dados do mangá retornados pela API.
    */
-  async searchManga(title) {
+  async searchManga(title, limite = 10, offset = 0) {
     try {
-      const response = await this.apiMangaDex.get(`/manga?title=${title}`)
-      return response.data
+      const response = await this.apiMangaDex.get(`/manga?title=${title}`, {
+        params: { limit: limite, offset: offset },
+      });
+      return response.data;
     } catch (error) {
-      console.error('Erro ao buscar manga:', error)
-      throw error
+      console.error("Erro ao buscar manga:", error);
+      throw error;
     }
   }
 
@@ -39,11 +43,11 @@ class axiosMangaDex {
    */
   async getFileCover(coveId) {
     try {
-      const response = await this.apiMangaDex.get(`/cover/${coveId}`)
-      return response.data
+      const response = await this.apiMangaDex.get(`/cover/${coveId}`);
+      return response.data;
     } catch (error) {
-      console.error('Erro ao obter coverID:', error)
-      throw error
+      console.error("Erro ao obter coverID:", error);
+      throw error;
     }
   }
 
@@ -61,8 +65,8 @@ class axiosMangaDex {
       const coverUrl = URL.createObjectURL(response.data)
       return coverUrl
     } catch (error) {
-      console.error('Erro ao obter imagem da capa:', error)
-      throw error
+      console.error("Erro ao obter imagem da capa:", error);
+      throw error;
     }
   }
 
@@ -74,11 +78,11 @@ class axiosMangaDex {
    */
   async getCapterVolume(mangaId) {
     try {
-      const response = await this.apiMangaDex.get(`/manga/${mangaId}/aggregate`)
-      return response.data
+      const response = await this.apiMangaDex.get(`/manga/${mangaId}/aggregate`);
+      return response.data;
     } catch (error) {
-      console.error('Erro ao obter os volumes e capítulos do manga: ', error)
-      throw error
+      console.error("Erro ao obter os volumes e capítulos do manga: ", error);
+      throw error;
     }
   }
 
@@ -89,11 +93,11 @@ class axiosMangaDex {
    */
   async getCapterPage(capterId) {
     try {
-      const response = await this.apiMangaDex.get(`/at-home/server/${capterId}`)
-      return response.data
+      const response = await this.apiMangaDex.get(`/at-home/server/${capterId}`);
+      return response.data;
     } catch (error) {
-      console.error('Erro ao obter dados das páginas: ', error)
-      throw error
+      console.error("Erro ao obter dados das páginas: ", error);
+      throw error;
     }
   }
 
@@ -106,13 +110,13 @@ class axiosMangaDex {
   async getImagePage(pageId, hashId) {
     try {
       const response = await this.uploadMangaDex.get(`/data/${hashId}/${pageId}`, {
-        responseType: 'blob',
-      })
-      const pageData = URL.createObjectURL(response.data)
-      return pageData
+        responseType: "blob",
+      });
+      const pageData = URL.createObjectURL(response.data);
+      return pageData;
     } catch (error) {
-      console.error(error)
-      throw error
+      console.error(error);
+      throw error;
     }
   }
 
@@ -126,13 +130,13 @@ class axiosMangaDex {
     try {
       const response = await this.apiMangaDex.get(
         `/manga/${mangaId}/feed?translatedLanguage[]=${idioma}`,
-      )
-      return response.data
+      );
+      return response.data;
     } catch (error) {
-      console.error(error)
-      throw error
+      console.error(error);
+      throw error;
     }
   }
 }
 
-export default new axiosMangaDex()
+export default new axiosMangaDex();
