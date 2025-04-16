@@ -6,14 +6,15 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 const resultado_pesquisa = ref([]);
-const pesquisa_inpuit = ref("");
+const pesquisaInput = ref("");
+const limiteDePesquisa = ref(20);
 const loading = ref(true);
 const total = ref(0);
 
-onMounted(async () => {
+const pesquisarMangas = async () => {
+  loading.value = true;
   try {
-    const response = await axiosMangaDex.searchManga(pesquisa_inpuit.value);
-    console.log(pesquisa_inpuit.value);
+    const response = await axiosMangaDex.searchManga(pesquisaInput.value, limiteDePesquisa.value);
     resultado_pesquisa.value = response.data;
     total.value = response.total;
     console.log(resultado_pesquisa.value);
@@ -22,6 +23,10 @@ onMounted(async () => {
   } finally {
     loading.value = false;
   }
+};
+
+onMounted(() => {
+  pesquisarMangas();
 });
 
 function getTitle(manga) {
