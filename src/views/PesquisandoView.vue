@@ -7,6 +7,7 @@ const router = useRouter();
 
 const resultado_pesquisa = ref([]);
 const pesquisaInput = ref("");
+const pesquisandoTitle = ref("");
 const limiteDePesquisa = ref(20);
 const loading = ref(true);
 const total = ref(0);
@@ -17,6 +18,7 @@ const pesquisarMangas = async () => {
     const response = await axiosMangaDex.searchManga(pesquisaInput.value, limiteDePesquisa.value);
     resultado_pesquisa.value = response.data;
     total.value = response.total;
+    pesquisandoTitle.value = pesquisaInput.value;
     console.log(resultado_pesquisa.value);
   } catch (e) {
     console.log("Erro ao pesquisar manga: ", e);
@@ -47,7 +49,15 @@ function getLink(data) {
 </script>
 
 <template>
+  <InputText
+    ref="mainBarSearch"
+    @keyup.enter="pesquisarMangas()"
+    v-model="pesquisaInput"
+    style="width: 100%"
+    placeholder="Pesquise um manga..."
+  />
   <div>
+    <h1 v-if="pesquisandoTitle">Pesquisando por: "{{ pesquisandoTitle }}"</h1>
     <DataTable
       :value="resultado_pesquisa"
       :rows="10"
