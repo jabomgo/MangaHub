@@ -66,15 +66,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex">
+  <div class="">
     <p>Explorar</p>
 
     <div class="card-list">
       <Card
         v-for="(item, index) in mangaInfo"
         :key="index"
-        style="width: 20rem; box-sizing: content-box; margin: 0.5px; overflow: hidden"
-        class="mb-3"
+        style="width: 20rem; box-sizing: content-box; margin: 0.5px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;"
+        class="mb-3, card-item"
         @click="navigateToCapitulos"
       >
         <!-- Header com a imagem do manga -->
@@ -111,6 +111,11 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   height: 370px;
+}
+
+.card-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(196, 194, 194, 0.1);
 }
 
 .card-image {
