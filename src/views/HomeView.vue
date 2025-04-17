@@ -53,8 +53,8 @@ const fetchUrlImage = async () => {
   }
 };
 
-function navigateToCapitulos(mangaId) {
-  router.push({name: 'capitulos', query: {mangaId}});
+function navigateToCapitulos(manga) {
+  router.push({name: 'capitulos', query: {manga}});
 }
 
 function navigateToPesquisa() {
