@@ -53,8 +53,8 @@ const fetchUrlImage = async () => {
   }
 };
 
-function navigateToCapitulos() {
-  router.push("/capitulos");
+function navigateToCapitulos(mangaId) {
+  router.push({name: 'capitulos', query: {mangaId}});
 }
 
 function navigateToPesquisa() {
@@ -73,9 +73,9 @@ onMounted(() => {
       <Card
         v-for="(item, index) in mangaInfo"
         :key="index"
-        style="width: 20rem; box-sizing: content-box; margin: 0.5px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;"
+        style="width: 20rem; box-sizing: content-box; margin: 0.5px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;cursor: pointer;"
         class="mb-3, card-item"
-        @click="navigateToCapitulos"
+        @click="navigateToCapitulos(item.id)"
       >
         <!-- Header com a imagem do manga -->
         <template #content>
