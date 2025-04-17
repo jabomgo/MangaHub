@@ -6,7 +6,7 @@ const router = useRoute();
 
 const mangaCapitulos = ref([1, 1, 1]);
 const mangaCover = ref(
-  "https://static.vecteezy.com/ti/fotos-gratis/t2/36324708-ai-gerado-cenario-do-uma-tigre-caminhando-dentro-a-floresta-foto.jpg",
+  "https://mangadex.org/covers/80422e14-b9ad-4fda-970f-de370d5fa4e5/b7a6b10c-20cf-4c9a-8955-1e79c56ac3fd.jpg.512.jpg",
 );
 const mangaId = ref("");
 const capituloFilter = ref(null)
@@ -22,8 +22,8 @@ onMounted(async () => {
       <Card class="w-full h-full" style="overflow: hidden">
         <template #header>
           <div
-            class="flex align-items-center justify-content-center"
-            style="height: 300px; background-color: #f4f4f4"
+            class="flex align-items-center justify-content-center bg-black"
+            style="height: 300px;"
           >
             <img alt="user header" :src="mangaCover" class="w-auto h-full object-contain" />
           </div>
@@ -38,7 +38,7 @@ onMounted(async () => {
 
     <div class="capitulos-list col-12 md:col-8 lg:col-9">
       <div class="flex flex-column gap-3 w-full">
-        <InputNumber v-model="capituloFilter" showButtons prefix="Ir para capítulo " placeholder="Ir para capítulo..."/>
+        <InputNumber fluid v-model="capituloFilter" showButtons prefix="Ir para capítulo " placeholder="Ir para capítulo..."/>
 
         <Card v-for="(capitulo, index) in mangaCapitulos" :key="index" class="w-full">
           <template #title>Capítulo {{ index + 1 }}</template>
