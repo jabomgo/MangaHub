@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 const mangaInfo = ref([]);
 const coverFileNames = ref([]);
 const router = useRouter();
+const loading = ref(true)
 
 const explorarMangas = async () => {
   const mangaData = await axiosMangaDex.searchManga("", 4);
@@ -25,6 +26,7 @@ const explorarMangas = async () => {
 
   await fetchCoverFileNames();
   await fetchUrlImage();
+  loading.value = false
 }
 
 const fetchCoverFileNames = async () => {
@@ -67,7 +69,7 @@ onMounted(() => {
 
 <template>
   <div class="">
-    <p>Explorar</p>
+    <h1 class="title-container">Explorar</h1>
 
     <div class="card-list">
       <Card
@@ -89,8 +91,9 @@ onMounted(() => {
 
         <template #footer>{{ item.title }}</template>
       </Card>
+
     </div>
-    <div class="button-container">
+    <div v-if="!loading" class="button-container">
       <Button label="Ver mais"
       icon="pi pi-plus"
       @click="navigateToPesquisa"/>
@@ -138,5 +141,12 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+.title-container {
+  padding-bottom: 0.5rem;
+  color: white;
+  display: flex;
+  justify-content: center;
 }
 </style>
