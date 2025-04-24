@@ -20,6 +20,7 @@ import Menubar from "primevue/menubar";
 import Card from "primevue/card";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
+import Paginator from "primevue/paginator";
 
 import App from "./App.vue";
 import router from "./router";
@@ -51,5 +52,6 @@ app.component("Menubar", Menubar);
 app.component("Card", Card);
 app.component("DataTable", DataTable);
 app.component("Column", Column);
+app.component("Paginator", Paginator)
 
 app.mount("#app");
