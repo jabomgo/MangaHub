@@ -37,6 +37,24 @@ class axiosMangaDex {
   }
 
   /**
+   * Busca as informações de um mangá específico pelo ID usando a API do MangaDex.
+   *
+   * @async
+   * @function
+   * @param {string} mangaID - O ID do mangá a ser buscado.
+   * @returns {Promise<Object|undefined>} Retorna os dados do mangá se a requisição for bem-sucedida, ou `undefined` em caso de erro.
+   * @throws {Error} Caso ocorra algum erro na requisição, ele é capturado e logado no console.
+   */
+  async getMangaById(mangaID) {
+    try {
+      const response = await this.apiMangaDex.get(`/manga/${mangaID}/`);
+      return response.data;
+    } catch (e) {
+      console.log("Erro ao buscar manga: ", e);
+    }
+  }
+
+  /**
    * Requisição para pegar os dados de um cover usando seu ID.
    * @param {string} coveId - O ID do cover do mangá.
    * @returns {Promise<Object>} Os dados do cover retornados pela API.
