@@ -1,19 +1,31 @@
 <script setup>
+import axiosMangaDex from "@/axios";
 import { onMounted, ref } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
-const router = useRoute();
+const route = useRoute();
+const router = useRouter();
 
-const mangaCapitulos = ref([1, 1, 1]);
+const mangaVolumes = ref([]);
 const mangaCover = ref(
   "https://mangadex.org/covers/80422e14-b9ad-4fda-970f-de370d5fa4e5/b7a6b10c-20cf-4c9a-8955-1e79c56ac3fd.jpg.512.jpg",
 );
 const mangaId = ref("");
-const capituloFilter = ref(null)
+const capituloFilter = ref(null);
+const mangaTitle = ref();
+const mangaDescription = ref();
 
 onMounted(async () => {
-  mangaId.value = router.query.manga;
+  mangaId.value = route.query.manga;
+  const mangaInfo = await axiosMangaDex.getMangaById(mangaId.value);
+  console.log(mangaInfo);
+  await loadCapitulos();
 });
+
+const loadCapitulos = async () => {
+  const response = await axiosMangaDex.getCapterVolume(mangaId.value);
+  mangaVolumes.value = response.volumes;
+};
 </script>
 
 <template>
@@ -23,7 +35,7 @@ onMounted(async () => {
         <template #header>
           <div
             class="flex align-items-center justify-content-center bg-black"
-            style="height: 300px;"
+            style="height: 300px"
           >
             <img alt="user header" :src="mangaCover" class="w-auto h-full object-contain" />
           </div>
@@ -38,12 +50,31 @@ onMounted(async () => {
 
     <div class="capitulos-list col-12 md:col-8 lg:col-9">
       <div class="flex flex-column gap-3 w-full">
-        <InputNumber fluid v-model="capituloFilter" showButtons prefix="Ir para capítulo " placeholder="Ir para capítulo..."/>
+        <InputNumber
+          fluid
+          v-model="capituloFilter"
+          showButtons
+          prefix="Ir para capítulo "
+          placeholder="Ir para capítulo..."
+        />
 
-        <Card v-for="(capitulo, index) in mangaCapitulos" :key="index" class="w-full">
-          <template #title>Capítulo {{ index + 1 }}</template>
+        <Card v-for="volume in mangaVolumes" :key="volume.volume" class="w-full bg-gray-800">
+          <template #title
+            ><h3>Volume {{ volume.volume }}</h3></template
+          >
           <template #content>
-            <Button label="Ler capítulo" />
+            <div
+              class="py-2 flex justify-content-center"
+              v-for="(capitulo, index) in volume.chapters"
+              :key="capitulo.chapter"
+            >
+              <Button
+                class="w-full justify-content-start"
+                :label="`Ir para capítulo ${capitulo.chapter}`"
+                icon="pi pi-book"
+                @click="router.push({ name: 'leitor', query:{ capitulo: capitulo.id } })"
+              />
+            </div>
           </template>
         </Card>
       </div>
