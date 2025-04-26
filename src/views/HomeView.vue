@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 const mangaInfo = ref([]);
 const coverFileNames = ref([]);
 const router = useRouter();
+const loading = ref(true)
 
 const explorarMangas = async () => {
   const mangaData = await axiosMangaDex.searchManga("", 4);
@@ -25,6 +26,7 @@ const explorarMangas = async () => {
 
   await fetchCoverFileNames();
   await fetchUrlImage();
+  loading.value = false
 }
 
 const fetchCoverFileNames = async () => {
@@ -53,8 +55,8 @@ const fetchUrlImage = async () => {
   }
 };
 
-function navigateToCapitulos() {
-  router.push("/capitulos");
+function navigateToCapitulos(manga) {
+  router.push({name: 'capitulos', query: {manga}});
 }
 
 function navigateToPesquisa() {
@@ -66,16 +68,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex">
-    <p>Explorar</p>
+  <div class="">
+    <h1 class="title-container">Explorar</h1>
 
     <div class="card-list">
       <Card
         v-for="(item, index) in mangaInfo"
         :key="index"
-        style="width: 20rem; box-sizing: content-box; margin: 0.5px; overflow: hidden"
-        class="mb-3"
-        @click="navigateToCapitulos"
+        style="width: 20rem; box-sizing: content-box; margin: 0.5px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;cursor: pointer;"
+        class="mb-3, card-item"
+        @click="navigateToCapitulos(item.id)"
       >
         <!-- Header com a imagem do manga -->
         <template #content>
@@ -89,8 +91,9 @@ onMounted(() => {
 
         <template #footer>{{ item.title }}</template>
       </Card>
+
     </div>
-    <div class="button-container">
+    <div v-if="!loading" class="button-container">
       <Button label="Ver mais"
       icon="pi pi-plus"
       @click="navigateToPesquisa"/>
@@ -113,6 +116,11 @@ onMounted(() => {
   height: 370px;
 }
 
+.card-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(196, 194, 194, 0.1);
+}
+
 .card-image {
   width: 100%;
   height: 100%;
@@ -133,5 +141,12 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+.title-container {
+  padding-bottom: 0.5rem;
+  color: white;
+  display: flex;
+  justify-content: center;
 }
 </style>
