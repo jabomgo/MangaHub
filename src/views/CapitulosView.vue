@@ -14,13 +14,53 @@ const mangaId = ref("");
 const capituloFilter = ref(null);
 const mangaTitle = ref();
 const mangaDescription = ref();
+const mangaAltTitle = ref();
 
 onMounted(async () => {
   mangaId.value = route.query.manga;
   const mangaInfo = await axiosMangaDex.getMangaById(mangaId.value);
   console.log(mangaInfo);
+
+  mangaTitle.value = chooseTitle(mangaInfo.data.attributes.title);
+  mangaDescription.value = chooseDescription(mangaInfo.data.attributes.description);
+  mangaAltTitle.value = altTitlePTBR(mangaInfo.data.attributes.altTitles);
+
   await loadCapitulos();
 });
+
+const chooseTitle = (titlesList) => {
+  if (titlesList["pt-br"]) {
+    return titlesList["pt-br"];
+  }
+  if (titlesList["en"]) {
+    return titlesList["en"];
+  }
+
+  const firstAvailable = Object.values(titlesList)[0];
+  return firstAvailable || "";
+};
+
+const chooseDescription = (descriptionList) => {
+  if (descriptionList["pt-br"]) {
+    return descriptionList["pt-br"];
+  }
+  if (descriptionList["en"]) {
+    return descriptionList["en"];
+  }
+
+  const firstAvailable = Object.values(descriptionList)[0];
+  return firstAvailable || "";
+};
+
+const altTitlePTBR = (altTitlesList) => {
+  if (!altTitlesList || !altTitlesList.length) return "";
+
+  for (const altTitleObj of altTitlesList) {
+    if (altTitleObj["pt-br"]) {
+      return altTitleObj["pt-br"];
+    }
+  }
+};
 
 const loadCapitulos = async () => {
   const response = await axiosMangaDex.getCapterVolume(mangaId.value);
@@ -40,11 +80,9 @@ const loadCapitulos = async () => {
             <img alt="user header" :src="mangaCover" class="w-auto h-full object-contain" />
           </div>
         </template>
-        <template #title>Título manga</template>
-        <template #subtitle>Descrição</template>
-        <template #content>
-          <p class="m-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
-        </template>
+        <template #title>{{ mangaTitle }}</template>
+        <template #subtitle>{{ mangaAltTitle }}</template>
+        <template #content>{{ mangaDescription }}</template>
       </Card>
     </div>
 
@@ -72,7 +110,7 @@ const loadCapitulos = async () => {
                 class="w-full justify-content-start"
                 :label="`Ir para capítulo ${capitulo.chapter}`"
                 icon="pi pi-book"
-                @click="router.push({ name: 'leitor', query:{ capitulo: capitulo.id } })"
+                @click="router.push({ name: 'leitor', query: { capitulo: capitulo.id } })"
               />
             </div>
           </template>
