@@ -1,34 +1,96 @@
 <script setup>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import axiosDB from '@/axiosDB';
 
 const router = useRouter();
+
+const email = ref("")
+const senha = ref("")
+const emailErro = ref("")
+const senhaErro = ref("")
+const formErro = ref("")
+
+const validateEmail = (email) => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // Expressão regular simples para email
+  return regex.test(email);
+};
+
+const handleSubmit = async () => {
+  // const newUser = {
+  //   email: email.value,
+  //   senha: senha.value
+  // }
+
+  // axiosDB.postUser(newUser)
+
+  emailErro.value = "";
+  senhaErro.value = "";
+  formErro.value = "";
+
+  if (!email.value) {
+    emailErro.value = 'Email é obigatório!'
+    return;
+  }
+
+  if(!validateEmail(email.value)) {
+    emailErro.value = 'Email inválido';
+    return;
+  }
+
+    // Validação da senha
+    if (!senha.value) {
+    senhaErro.value = 'Senha é obrigatória';
+    return;
+  }
+
+  const json = await axiosDB.getByEmail(email.value, senha.value)
+
+  if (json === null) {
+    formErro.value = 'Email ou senha errados'
+  }else{
+    router.push({name:'home'})
+  }
+}
 </script>
 
 <template>
   <div class="flex" style="justify-content: center; padding-top: 8rem;">
-    <!-- <p>login View</p> -->
-
     <Card class="flex align-items-center w-25rem h-19rem surface-200">
       <template #header>
         <h1>login</h1>
       </template>
       <template #content>
-        <Form>
+        <Form @submit.prevent="handleSubmit">
             <label for="Email">Email</label>
           <InputText
           class="w-23rem"
           id="Email"
-          placeholder="Digite o seu email"/>
+          v-model="email"
+          placeholder="Digite o seu email"
+          :class="{'p-invalid': emailErro}"
+          />
+          <small v-if="emailErro" class="p-error">{{ emailErro }}</small>
+
           <label for="Senha">Senha</label>
           <InputText
           class="w-23rem"
+          type="password"
+          v-model="senha"
           id="Senha"
-          placeholder="Digite a sua senha"/>
+          placeholder="Digite a sua senha"
+          :class="{'p-invalid': senhaErro}"
+          />
+          <small v-if="senhaErro" class="p-error">{{ senhaErro }}</small>
+
           <Button
           class="w-9rem my-3"
           style="margin-left: 7rem;"
           type="submit"
-          label="Entrar"/>
+          label="Entrar"
+          :class="{'p-invalid': formErro}"
+          />
+          <small v-if="formErro" class="p-error">{{ formErro }}</small>
         </Form>
       </template>
       <template #footer>
@@ -39,5 +101,11 @@ const router = useRouter();
 </template>
 
 <style scoped>
-
+.p-invalid {
+  border: 1px solid red;
+}
+.p-error {
+  color: red;
+  font-size: 12px;
+}
 </style>
