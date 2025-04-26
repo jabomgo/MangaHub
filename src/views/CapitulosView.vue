@@ -7,9 +7,12 @@ const route = useRoute();
 const router = useRouter();
 
 const mangaVolumes = ref([]);
-const mangaCover = ref(
-  "https://mangadex.org/covers/80422e14-b9ad-4fda-970f-de370d5fa4e5/b7a6b10c-20cf-4c9a-8955-1e79c56ac3fd.jpg.512.jpg",
-);
+const mangaCover = ref("");
+
+// const mangaCover = ref(
+//   "https://mangadex.org/covers/80422e14-b9ad-4fda-970f-de370d5fa4e5/b7a6b10c-20cf-4c9a-8955-1e79c56ac3fd.jpg.512.jpg",
+// );
+
 const mangaId = ref("");
 const capituloFilter = ref(null);
 const mangaTitle = ref();
@@ -24,9 +27,22 @@ onMounted(async () => {
   mangaTitle.value = chooseTitle(mangaInfo.data.attributes.title);
   mangaDescription.value = chooseDescription(mangaInfo.data.attributes.description);
   mangaAltTitle.value = altTitlePTBR(mangaInfo.data.attributes.altTitles);
+  mangaCover.value = await setCoverArtURL(mangaInfo.data.relationships)
 
   await loadCapitulos();
 });
+
+const setCoverArtURL = async (relations) => {
+  const coverObject = relations.find((item) => item.type ==="cover_art")
+  try {
+    const fileCoverResponse = await axiosMangaDex.getFileCover(coverObject.id)
+    const fileCoverName = fileCoverResponse.data.attributes.fileName
+    const fileCoverURL = await axiosMangaDex.getCoverArt(mangaId.value, fileCoverName)
+    return fileCoverURL
+  } catch (e) {
+    console.log("Falhar ao carregar imagem do manga: ", e)
+  }
+}
 
 const chooseTitle = (titlesList) => {
   if (titlesList["pt-br"]) {
@@ -77,7 +93,7 @@ const loadCapitulos = async () => {
             class="flex align-items-center justify-content-center bg-black"
             style="height: 300px"
           >
-            <img alt="user header" :src="mangaCover" class="w-auto h-full object-contain" />
+            <img :alt="`Cover art: ${mangaTitle}`" :src="mangaCover" class="w-auto h-full object-contain" />
           </div>
         </template>
         <template #title>{{ mangaTitle }}</template>
