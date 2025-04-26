@@ -8,11 +8,6 @@ const router = useRouter();
 
 const mangaVolumes = ref([]);
 const mangaCover = ref("");
-
-// const mangaCover = ref(
-//   "https://mangadex.org/covers/80422e14-b9ad-4fda-970f-de370d5fa4e5/b7a6b10c-20cf-4c9a-8955-1e79c56ac3fd.jpg.512.jpg",
-// );
-
 const mangaId = ref("");
 const capituloFilter = ref(null);
 const mangaTitle = ref();
