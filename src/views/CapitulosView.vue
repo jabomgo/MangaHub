@@ -32,7 +32,7 @@ const setCoverArtURL = async (relations) => {
   try {
     const fileCoverResponse = await axiosMangaDex.getFileCover(coverObject.id)
     const fileCoverName = fileCoverResponse.data.attributes.fileName
-    const fileCoverURL = await axiosMangaDex.getCoverArt(mangaId.value, fileCoverName)
+    const fileCoverURL = axiosMangaDex.getCoverArt(mangaId.value, fileCoverName)
     return fileCoverURL
   } catch (e) {
     console.log("Falhar ao carregar imagem do manga: ", e)
