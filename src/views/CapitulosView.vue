@@ -1,6 +1,6 @@
 <script setup>
 import axiosMangaDex from "@/axios";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const route = useRoute();
@@ -22,22 +22,22 @@ onMounted(async () => {
   mangaTitle.value = chooseTitle(mangaInfo.data.attributes.title);
   mangaDescription.value = chooseDescription(mangaInfo.data.attributes.description);
   mangaAltTitle.value = altTitlePTBR(mangaInfo.data.attributes.altTitles);
-  mangaCover.value = await setCoverArtURL(mangaInfo.data.relationships)
+  mangaCover.value = await setCoverArtURL(mangaInfo.data.relationships);
 
   await loadCapitulos();
 });
 
 const setCoverArtURL = async (relations) => {
-  const coverObject = relations.find((item) => item.type ==="cover_art")
+  const coverObject = relations.find((item) => item.type === "cover_art");
   try {
-    const fileCoverResponse = await axiosMangaDex.getFileCover(coverObject.id)
-    const fileCoverName = fileCoverResponse.data.attributes.fileName
-    const fileCoverURL = axiosMangaDex.getCoverArt(mangaId.value, fileCoverName)
-    return fileCoverURL
+    const fileCoverResponse = await axiosMangaDex.getFileCover(coverObject.id);
+    const fileCoverName = fileCoverResponse.data.attributes.fileName;
+    const fileCoverURL = axiosMangaDex.getCoverArt(mangaId.value, fileCoverName);
+    return fileCoverURL;
   } catch (e) {
-    console.log("Falhar ao carregar imagem do manga: ", e)
+    console.log("Falhar ao carregar imagem do manga: ", e);
   }
-}
+};
 
 const chooseTitle = (titlesList) => {
   if (titlesList["pt-br"]) {
@@ -75,8 +75,29 @@ const altTitlePTBR = (altTitlesList) => {
 
 const loadCapitulos = async () => {
   const response = await axiosMangaDex.getCapterVolume(mangaId.value);
-  mangaVolumes.value = response.volumes;
+  mangaVolumes.value = Object.values(response.volumes);
 };
+
+const filteredVolumes = computed(() => {
+  const volumes = mangaVolumes.value || [];
+  if (!capituloFilter.value) return volumes;
+
+  return volumes
+    .map((volume) => {
+      const chaptersArray = Object.values(volume.chapters || {});
+      const matchingChapter = chaptersArray.find(
+        (chapter) => chapter.chapter === String(capituloFilter.value),
+      );
+      if (matchingChapter) {
+        return {
+          volume: volume.volume,
+          chapters: [matchingChapter],
+        };
+      }
+      return null;
+    })
+    .filter((volume) => volume !== null);
+});
 </script>
 
 <template>
@@ -88,7 +109,11 @@ const loadCapitulos = async () => {
             class="flex align-items-center justify-content-center bg-black"
             style="height: 300px"
           >
-            <img :alt="`Cover art: ${mangaTitle}`" :src="mangaCover" class="w-auto h-full object-contain" />
+            <img
+              :alt="`Cover art: ${mangaTitle}`"
+              :src="mangaCover"
+              class="w-auto h-full object-contain"
+            />
           </div>
         </template>
         <template #title>{{ mangaTitle }}</template>
@@ -107,10 +132,10 @@ const loadCapitulos = async () => {
           placeholder="Ir para capítulo..."
         />
 
-        <Card v-for="volume in mangaVolumes" :key="volume.volume" class="w-full bg-gray-800">
-          <template #title
-            ><h3>Volume {{ volume.volume }}</h3></template
-          >
+        <Card v-for="volume in filteredVolumes" :key="volume.volume" class="w-full bg-gray-800">
+          <template #title>
+            <h3>Volume {{ volume.volume }}</h3>
+          </template>
           <template #content>
             <div
               class="py-2 flex justify-content-center"
