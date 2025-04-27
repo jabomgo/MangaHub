@@ -56,6 +56,15 @@ class axiosDB {
       console.error(error)
     }
   }
+
+  async getMangaByEmail(email) {
+    try {
+      const response = await this.apiJsonDb.get(`/users?email=${email}`)
+      return response.data
+    }catch(error) {
+      console.error(error)
+    }
+  }
 }
 
 export default new axiosDB();
