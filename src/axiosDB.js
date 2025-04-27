@@ -18,23 +18,15 @@ class axiosDB {
     }
   }
 
-  async getByEmail(email, senha) {
+  async getByEmail(email) {
     try{
       const response = await this.apiJsonDb.get(`/users?email=${email}`)
-      const data = response.data[0]
 
       if (response.data.length === 0){
         console.error("Usuário não encontrado")
         return null
       }
-
-      if(data.senha === senha){
-        console.log("sucesso no login")
-        return data
-      }
-
-      console.log("Email ou senha errados")
-      return null
+      return response.data[0]
     }catch(error) {
       console.error(error)
     }

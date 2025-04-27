@@ -38,16 +38,15 @@ const handleSubmit = async () => {
     return;
   }
 
-    // Validação da senha
-    if (!senha.value) {
+  if (!senha.value) {
     senhaErro.value = 'Senha é obrigatória';
     return;
   }
 
-  const json = await axiosDB.getByEmail(email.value, senha.value)
+  const json = await axiosDB.getByEmail(email.value)
 
-  if (json === null) {
-    formErro.value = 'Email ou senha errados'
+  if (json.senha !== senha.value) {
+    formErro.value = 'senha incorreta'
   }else{
     router.push({name:'home'})
   }
