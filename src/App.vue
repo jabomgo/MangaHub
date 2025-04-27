@@ -53,7 +53,7 @@ function pushTo(routerName) {
     <footer class="flex justify-content-center py-6">
       <p>
         Dados fornecidos pela
-        <a href="https://mangadex.org" target="_blank">MangaDex API</a>
+        <a href="https://api.mangadex.org/docs/" target="_blank">MangaDex API</a>
       </p>
     </footer>
   </div>
