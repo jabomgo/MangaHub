@@ -58,22 +58,22 @@ function navegatePages(direction) {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center min-h-screen p-4">
-    <div class="flex justify-center items-center mb-4 w-full">
-      <img :src = "imageURL" class="max-w-full max-h-[80vh] object-contain"/>
+  <div class="flex flex-col items-center justify-content-center min-h-screen p-4">
+    <div class="flex justify-content-center items-center mb-4 w-full">
+      <img :src = "imageURL" class="max-w-full max-h-auto object-contain"/>
     </div>
   </div>
-  <div class="flex flex-col items-center justify-center p-4">
+  <div class="flex flex-col items-center justify-content-center p-4">
       <Button
         @click = 'navegatePages("back")'
         label="Voltar"
-        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg=blue-600"
+        class="px-4 py-2 bg-orange-500 text-black border-transparent hover:bg-orange-700"
       />
-        <span class="text-lg font-medium">{{count+1}} / {{arrayData.length}}</span>
+        <span class="text-lg font-medium mx-3">{{count+1}} / {{arrayData.length}}</span>
       <Button
         @click = 'navegatePages("next")'
         label="Avançar"
-        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg=blue-600"
+        class="px-4 py-2 bg-orange-500 text-black border-transparent hover:bg-orange-700"
       />
   </div>
 </template>
