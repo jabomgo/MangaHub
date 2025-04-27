@@ -22,6 +22,7 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import InputNumber from "primevue/inputnumber";
 import Paginator from "primevue/paginator";
+import Skeleton from "primevue/skeleton";
 
 import App from "./App.vue";
 import router from "./router";
@@ -55,5 +56,6 @@ app.component("DataTable", DataTable);
 app.component("Column", Column);
 app.component("InputNumber", InputNumber)
 app.component("Paginator", Paginator)
+app.component("Skeleton", Skeleton)
 
 app.mount("#app");

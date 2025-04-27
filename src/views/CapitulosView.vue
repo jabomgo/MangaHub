@@ -13,8 +13,12 @@ const capituloFilter = ref(null);
 const mangaTitle = ref();
 const mangaDescription = ref();
 const mangaAltTitle = ref();
+const isLoadingImage = ref(true)
+const isLoadingVolume = ref(true)
+const skeletonDefaultRep = ref(10)
 
 onMounted(async () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   mangaId.value = route.query.manga;
   const mangaInfo = await axiosMangaDex.getMangaById(mangaId.value);
   console.log(mangaInfo);
@@ -24,10 +28,11 @@ onMounted(async () => {
   mangaAltTitle.value = altTitlePTBR(mangaInfo.data.attributes.altTitles);
   mangaCover.value = await setCoverArtURL(mangaInfo.data.relationships);
 
-  await loadCapitulos();
+  await loadVolume();
 });
 
 const setCoverArtURL = async (relations) => {
+  isLoadingImage.value = true
   const coverObject = relations.find((item) => item.type === "cover_art");
   try {
     const fileCoverResponse = await axiosMangaDex.getFileCover(coverObject.id);
@@ -36,6 +41,8 @@ const setCoverArtURL = async (relations) => {
     return fileCoverURL;
   } catch (e) {
     console.log("Falhar ao carregar imagem do manga: ", e);
+  } finally {
+    isLoadingImage.value = false
   }
 };
 
@@ -73,9 +80,16 @@ const altTitlePTBR = (altTitlesList) => {
   }
 };
 
-const loadCapitulos = async () => {
-  const response = await axiosMangaDex.getCapterVolume(mangaId.value);
-  mangaVolumes.value = Object.values(response.volumes);
+const loadVolume = async () => {
+  isLoadingVolume.value = true
+  try {
+    const response = await axiosMangaDex.getCapterVolume(mangaId.value);
+    mangaVolumes.value = Object.values(response.volumes);
+  } catch (e) {
+    console.log("Erro ao carregar a listagem de capitulos: ",e)
+  } finally {
+    isLoadingVolume.value = false
+  }
 };
 
 const filteredVolumes = computed(() => {
@@ -101,10 +115,10 @@ const filteredVolumes = computed(() => {
 </script>
 
 <template>
-  <div class="capitulos-container grid w-full my-4">
-    <div class="manga-sobre col-12 md:col-4 lg:col-3">
+  <div class="grid w-full my-4">
+    <div class="col-12 md:col-4 lg:col-3">
       <Card class="w-full h-full" style="overflow: hidden">
-        <template #header>
+        <template v-if="!isLoadingImage" #header>
           <div
             class="flex align-items-center justify-content-center bg-black"
             style="height: 300px"
@@ -115,6 +129,9 @@ const filteredVolumes = computed(() => {
               class="w-auto h-full object-contain"
             />
           </div>
+        </template>
+        <template v-else #header>
+          <Skeleton width="100%" height="300px" />
         </template>
         <template #title>{{ mangaTitle }}</template>
         <template #subtitle>{{ mangaAltTitle }}</template>
@@ -132,7 +149,7 @@ const filteredVolumes = computed(() => {
           placeholder="Ir para capítulo..."
         />
 
-        <Card v-for="volume in filteredVolumes" :key="volume.volume" class="w-full bg-gray-800">
+        <Card v-if="!isLoadingVolume" v-for="volume in filteredVolumes" :key="volume.volume" class="w-full bg-gray-800">
           <template #title>
             <h3>Volume {{ volume.volume }}</h3>
           </template>
@@ -151,6 +168,8 @@ const filteredVolumes = computed(() => {
             </div>
           </template>
         </Card>
+
+        <Skeleton v-else v-for="i in skeletonDefaultRep" class="w-full py-6" :key="i" borderRadius="16px"></Skeleton>
       </div>
     </div>
   </div>

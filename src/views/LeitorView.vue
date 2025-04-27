@@ -2,7 +2,7 @@
 
 import axiosMangaDex from "@/axios";
 import { useRoute, useRouter } from "vue-router";
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, onUnmounted } from "vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -34,6 +34,10 @@ onMounted(async () => {
   console.log(arrayData.value);
   showImage(count);
   window.addEventListener('keydown', handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('keydown', handleKeyDown);
 });
 
 function navegatePages(direction) {
