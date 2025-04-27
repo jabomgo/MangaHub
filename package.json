@@ -2,9 +2,11 @@
   "name": "mangahub",
   "version": "0.0.0",
   "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
+  "type": "module",  
+    "scripts": {
+    "dev": "concurrently \"npm run dev:app\" \"npm run dev:api\"",
+    "dev:app": "vite",
+    "dev:api": "npx json-server src/dataBase/db.json --port 3000",
     "build": "vite build",
     "preview": "vite preview",
     "test:unit": "vitest",
@@ -28,6 +30,7 @@
     "@vitest/eslint-plugin": "^1.1.36",
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/test-utils": "^2.4.6",
+    "concurrently": "^9.1.2",
     "eslint": "^9.21.0",
     "eslint-plugin-vue": "~10.0.0",
     "globals": "^16.0.0",
