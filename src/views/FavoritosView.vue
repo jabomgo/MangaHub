@@ -3,14 +3,16 @@ import { ref, onMounted } from "vue";
 import axiosMangaDex from "../axios";
 import axiosDB from "@/axiosDB";
 import { useRouter } from 'vue-router';
+import { useSessionStore } from "@/stores/session";
 
 const mangaInfo = ref([]);
 const coverFileNames = ref([]);
 const router = useRouter();
-const loading = ref(true)
+const loading = ref(true);
+const session = useSessionStore()
 
 const explorarMangas = async () => {
-  const mangaId = await axiosDB.getMangaByEmail('example@gmail.com')
+  const mangaId = await axiosDB.getMangaByEmail(session.email)
 
   for (let index = 1; index < mangaId.length; index++) {
     const mangaData = await axiosMangaDex.getMangaById(mangaId[index].mangaId);
