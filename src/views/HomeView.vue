@@ -1,12 +1,12 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import axiosMangaDex from "../axios";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const mangaInfo = ref([]);
 const coverFileNames = ref([]);
 const router = useRouter();
-const loading = ref(true)
+const loading = ref(true);
 
 const explorarMangas = async () => {
   const mangaData = await axiosMangaDex.searchManga("", 4);
@@ -21,13 +21,13 @@ const explorarMangas = async () => {
       "Sem título",
     description: manga.attributes.description.en || "Sem descrição",
     coverId: manga.relationships?.find((rel) => rel.type == "cover_art")?.id,
-    imageLoad: false
+    imageLoad: false,
   }));
 
   await fetchCoverFileNames();
   await fetchUrlImage();
-  loading.value = false
-}
+  loading.value = false;
+};
 
 const fetchCoverFileNames = async () => {
   for (let i = 0; i < mangaInfo.value.length; i++) {
@@ -50,17 +50,17 @@ const fetchUrlImage = async () => {
     if (manga.coverId) {
       const Url = await axiosMangaDex.getCoverArt(manga.id, cover.fileName, 256);
       manga.Url = Url;
-      manga.imageLoad = true
+      manga.imageLoad = true;
     }
   }
 };
 
 function navigateToCapitulos(manga) {
-  router.push({name: 'capitulos', query: {manga}});
+  router.push({ name: "capitulos", query: { manga } });
 }
 
 function navigateToPesquisa() {
-  router.push('/pesquisando');
+  router.push("/pesquisando");
 }
 onMounted(() => {
   explorarMangas();
@@ -75,13 +75,22 @@ onMounted(() => {
       <Card
         v-for="(item, index) in mangaInfo"
         :key="index"
-        style="width: 20rem; box-sizing: content-box; margin: 0.5px; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease;cursor: pointer;"
+        style="
+          width: 20rem;
+          box-sizing: content-box;
+          margin: 0.5px;
+          overflow: hidden;
+          transition:
+            transform 0.3s ease,
+            box-shadow 0.3s ease;
+          cursor: pointer;
+        "
         class="mb-3, card-item"
         @click="navigateToCapitulos(item.id)"
       >
         <template #content>
           <div v-if="!item.imageLoad" class="image-placeholder">
-            <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: #fff;"></i>
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: #fff"></i>
           </div>
           <div v-else class="image-container">
             <img v-if="item.Url" :src="item.Url" alt="cover_art" class="card-image" />
@@ -90,15 +99,11 @@ onMounted(() => {
 
         <template #footer>{{ item.title }}</template>
       </Card>
-
     </div>
     <div v-if="!loading" class="button-container">
-      <Button label="Ver mais"
-      icon="pi pi-plus"
-      @click="navigateToPesquisa"/>
+      <Button label="Ver mais" icon="pi pi-plus" @click="navigateToPesquisa" />
     </div>
   </div>
-
 </template>
 
 <style scoped>

@@ -1,5 +1,5 @@
 <script setup>
-import FavoriteButton from './FavButton.vue';
+import FavoriteButton from "./FavButton.vue";
 import axiosMangaDex from "@/axios";
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -14,12 +14,12 @@ const capituloFilter = ref(null);
 const mangaTitle = ref();
 const mangaDescription = ref();
 const mangaAltTitle = ref();
-const isLoadingImage = ref(true)
-const isLoadingVolume = ref(true)
-const skeletonDefaultRep = ref(10)
+const isLoadingImage = ref(true);
+const isLoadingVolume = ref(true);
+const skeletonDefaultRep = ref(10);
 
 onMounted(async () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: "smooth" });
   mangaId.value = route.query.manga;
   const mangaInfo = await axiosMangaDex.getMangaById(mangaId.value);
   console.log(mangaInfo);
@@ -33,7 +33,7 @@ onMounted(async () => {
 });
 
 const setCoverArtURL = async (relations) => {
-  isLoadingImage.value = true
+  isLoadingImage.value = true;
   const coverObject = relations.find((item) => item.type === "cover_art");
   try {
     const fileCoverResponse = await axiosMangaDex.getFileCover(coverObject.id);
@@ -43,7 +43,7 @@ const setCoverArtURL = async (relations) => {
   } catch (e) {
     console.log("Falhar ao carregar imagem do manga: ", e);
   } finally {
-    isLoadingImage.value = false
+    isLoadingImage.value = false;
   }
 };
 
@@ -82,14 +82,14 @@ const altTitlePTBR = (altTitlesList) => {
 };
 
 const loadVolume = async () => {
-  isLoadingVolume.value = true
+  isLoadingVolume.value = true;
   try {
     const response = await axiosMangaDex.getCapterVolume(mangaId.value);
     mangaVolumes.value = Object.values(response.volumes);
   } catch (e) {
-    console.log("Erro ao carregar a listagem de capitulos: ",e)
+    console.log("Erro ao carregar a listagem de capitulos: ", e);
   } finally {
-    isLoadingVolume.value = false
+    isLoadingVolume.value = false;
   }
 };
 
@@ -135,12 +135,12 @@ const filteredVolumes = computed(() => {
           <Skeleton width="100%" height="300px" />
         </template>
         <template #title>
-        <FavoriteButton
-          :mangaId="mangaId"
-          :isFavorited="isFavorited"
-          @favorite-toggled="handleFavoriteToggle"
-        />
-        {{ mangaTitle }}
+          <FavoriteButton
+            :mangaId="mangaId"
+            :isFavorited="isFavorited"
+            @favorite-toggled="handleFavoriteToggle"
+          />
+          {{ mangaTitle }}
         </template>
         <template #subtitle>{{ mangaAltTitle }}</template>
         <template #content>{{ mangaDescription }}</template>
@@ -157,8 +157,12 @@ const filteredVolumes = computed(() => {
           placeholder="Ir para capítulo..."
         />
 
-        <Card v-if="!isLoadingVolume" v-for="volume in filteredVolumes" :key="volume.volume"
-        class="w-full bg-black-alpha-10">
+        <Card
+          v-if="!isLoadingVolume"
+          v-for="volume in filteredVolumes"
+          :key="volume.volume"
+          class="w-full bg-black-alpha-10"
+        >
           <template #title>
             <h3>Volume {{ volume.volume }}</h3>
           </template>
@@ -178,7 +182,13 @@ const filteredVolumes = computed(() => {
           </template>
         </Card>
 
-        <Skeleton v-else v-for="i in skeletonDefaultRep" class="w-full py-6" :key="i" borderRadius="16px"></Skeleton>
+        <Skeleton
+          v-else
+          v-for="i in skeletonDefaultRep"
+          class="w-full py-6"
+          :key="i"
+          borderRadius="16px"
+        ></Skeleton>
       </div>
     </div>
   </div>

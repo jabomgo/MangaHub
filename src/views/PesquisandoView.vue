@@ -38,7 +38,7 @@ const onPageChange = (event) => {
 };
 
 onMounted(() => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: "smooth" });
   pesquisarMangas();
 });
 

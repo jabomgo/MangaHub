@@ -75,7 +75,7 @@ class axiosMangaDex {
    * @param {string} fileName - O nome do arquivo da capa.
    * @returns {Promise<string>} A URL temporária da imagem da capa.
    */
-  async getCoverArt(mangaId, fileName, width=512) {
+  async getCoverArt(mangaId, fileName, width = 512) {
     try {
       const response = await this.uploadMangaDex.get(
         `/covers/${mangaId}/${fileName}.${width}.jpg`,
