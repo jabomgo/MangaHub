@@ -1,9 +1,9 @@
 import "./assets/main.css";
-import 'primeflex/primeflex.css';
-
+import "primeflex/primeflex.css";
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";
+import persistedState from "pinia-plugin-persistedstate";
 
 import PrimeVue from "primevue/config";
 import Aura from "@primeuix/themes/aura";
@@ -37,7 +37,10 @@ app.use(PrimeVue, {
   ripple: true,
 });
 
-app.use(createPinia());
+const pinia = createPinia();
+pinia.use(persistedState);
+
+app.use(pinia);
 app.use(router);
 
 app.directive("ripple", Ripple);
@@ -54,8 +57,8 @@ app.component("Menubar", Menubar);
 app.component("Card", Card);
 app.component("DataTable", DataTable);
 app.component("Column", Column);
-app.component("InputNumber", InputNumber)
-app.component("Paginator", Paginator)
-app.component("Skeleton", Skeleton)
+app.component("InputNumber", InputNumber);
+app.component("Paginator", Paginator);
+app.component("Skeleton", Skeleton);
 
 app.mount("#app");

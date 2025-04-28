@@ -1,8 +1,12 @@
 <script setup>
+import { useSessionStore } from "@/stores/session";
 import "primeicons/primeicons.css";
 import { RouterView } from "vue-router";
 import router from "./router";
 import { ref } from "vue";
+
+const session = useSessionStore();
+
 const items = ref([
   {
     label: "MangaHub",
@@ -31,7 +35,7 @@ const items = ref([
       {
         label: "Sair",
         icon: "pi pi-sign-out",
-        command: () => console.log("logout"),
+        command: () => session.clearSession(),
       },
     ],
   },
