@@ -10,12 +10,16 @@ const router = useRouter();
 const chapterId = ref("");
 const arrayData = ref([]);
 const imageURL = ref("");
+const isLoading = ref(true)
 let count = ref(0);
 
 const hash = ref("");
 
 const showImage = async (count) => {
+  isLoading.value = true
+  window.scrollTo({ top: 0, behavior: 'smooth' });
   imageURL.value = await axiosMangaDex.getImagePage(arrayData.value[count.value], hash.value);
+  isLoading.value = false
 };
 
 const handleKeyDown = (e) => {
@@ -63,9 +67,10 @@ function navegatePages(direction) {
 
 <template>
   <div class="flex flex-col items-center justify-content-center min-h-screen p-4">
-    <div class="flex justify-content-center items-center mb-4 w-full">
+    <div v-if="!isLoading" class="flex justify-content-center items-center mb-4 w-full">
       <img :src = "imageURL" class="max-w-full max-h-auto object-contain"/>
     </div>
+    <Skeleton v-else size="50rem"></Skeleton>
   </div>
   <div class="flex flex-col items-center justify-content-center p-4">
       <Button
