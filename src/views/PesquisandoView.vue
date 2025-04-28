@@ -91,7 +91,7 @@ function getLink(data) {
       <Column header="Conteúdo original">
         <template #body="{ data }">
           <a v-if="getLink(data)" :href="getLink(data)" target="_blank">
-            <Button label="Ir" icon="pi pi-external-link" />
+            <Button class="bg-orange-500 border-none" label="Ir" icon="pi pi-external-link" />
           </a>
         </template>
       </Column>
@@ -100,6 +100,7 @@ function getLink(data) {
           <Button
             label="Ir"
             icon="pi pi-book"
+            class="bg-orange-500 border-none"
             @click="router.push({ name: 'capitulos', query: { manga: data.id } })"
           />
         </template>
