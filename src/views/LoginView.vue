@@ -1,4 +1,5 @@
 <script setup>
+import { useSessionStore } from "@/stores/session";
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import axiosDB from '@/axiosDB';
@@ -10,6 +11,8 @@ const senha = ref("")
 const emailErro = ref("")
 const senhaErro = ref("")
 const formErro = ref("")
+
+const sessionStore = useSessionStore()
 
 const validateEmail = (email) => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // Expressão regular simples para email
@@ -48,6 +51,9 @@ const handleSubmit = async () => {
   if (json.senha !== senha.value) {
     formErro.value = 'senha incorreta'
   }else{
+    sessionStore.setUserEmail(json.email)
+    const favoritos = await axiosDB.getMangaByEmail(json.email)
+    sessionStore.addFavorito(favoritos)
     router.push({name:'home'})
   }
 }
