@@ -79,7 +79,6 @@ onMounted(() => {
         class="mb-3, card-item"
         @click="navigateToCapitulos(item.id)"
       >
-        <!-- Header com a imagem do manga -->
         <template #content>
           <div v-if="!item.imageLoad" class="image-placeholder">
             <i class="pi pi-spin pi-spinner" style="font-size: 2rem; color: #fff;"></i>

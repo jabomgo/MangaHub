@@ -1,4 +1,5 @@
 <script setup>
+import FavoriteButton from './FavButton.vue';
 import axiosMangaDex from "@/axios";
 import { onMounted, ref, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -133,7 +134,14 @@ const filteredVolumes = computed(() => {
         <template v-else #header>
           <Skeleton width="100%" height="300px" />
         </template>
-        <template #title>{{ mangaTitle }}</template>
+        <template #title>
+        <FavoriteButton
+          :mangaId="mangaId"
+          :isFavorited="isFavorited"
+          @favorite-toggled="handleFavoriteToggle"
+        />
+        {{ mangaTitle }}
+        </template>
         <template #subtitle>{{ mangaAltTitle }}</template>
         <template #content>{{ mangaDescription }}</template>
       </Card>
@@ -149,7 +157,8 @@ const filteredVolumes = computed(() => {
           placeholder="Ir para capítulo..."
         />
 
-        <Card v-if="!isLoadingVolume" v-for="volume in filteredVolumes" :key="volume.volume" class="w-full bg-gray-800">
+        <Card v-if="!isLoadingVolume" v-for="volume in filteredVolumes" :key="volume.volume"
+        class="w-full bg-black-alpha-10">
           <template #title>
             <h3>Volume {{ volume.volume }}</h3>
           </template>
@@ -160,7 +169,7 @@ const filteredVolumes = computed(() => {
               :key="capitulo.chapter"
             >
               <Button
-                class="w-full justify-content-start"
+                class="w-full justify-content-start bg-orange-500 border-transparent"
                 :label="`Ir para capítulo ${capitulo.chapter}`"
                 icon="pi pi-book"
                 @click="router.push({ name: 'leitor', query: { capitulo: capitulo.id } })"
