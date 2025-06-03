@@ -1,5 +1,5 @@
 import axios from "axios";
-
+ 
 class axiosMangaDex {
   constructor() {
     this.uploadMangaDex = axios.create({
