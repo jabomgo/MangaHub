@@ -7,35 +7,40 @@ const route = useRoute();
 const router = useRouter();
 
 const chapterId = ref("");
-const arrayData = ref([]);
+const pageData = ref([]);
 const imageURL = ref("");
 const isLoading = ref(true);
-let count = ref(0);
+let pageNumber = ref(0);
 
 const hash = ref("");
 
-const showImage = async (count) => {
-  isLoading.value = true;
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  imageURL.value = await axiosMangaDex.getImagePage(arrayData.value[count.value], hash.value);
-  isLoading.value = false;
+const handleKeyDown = (event) => {
+  navegatePages(event);
 };
 
-const handleKeyDown = (e) => {
-  if (e.key === "ArrowLeft") {
-    navegatePages("back");
-  } else if (e.key === "ArrowRight") {
-    navegatePages("next");
-  }
-};
+function navegatePages(eventClick) {
+    if (eventClick.key === "ArrowLeft") {
+        pageNumber.value > 0 ? pageNumber.value-- : console.log("Você já está na página inicial")
+    }
+    else if (eventClick.key === "ArrowRight") {
+        pageNumber.value < pageData.value.length ? pageNumber.value++ : console.log("Você já está na última página")
+    }
+}
+
+const showImage = async (page) => {
+    isLoading.value = true;
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    imageURL.value = await axiosMangaDex.getImagePage(pageData.value[page.value], hash.value);
+    isLoading.value = false;
+  };
 
 onMounted(async () => {
   chapterId.value = route.query.capitulo;
   const page = await axiosMangaDex.getCapterPage(chapterId.value);
   hash.value = page.chapter.hash;
-  arrayData.value = page.chapter.data;
-  console.log(arrayData.value);
-  showImage(count);
+  pageData.value = page.chapter.data;
+  console.log(pageData.value);
+  showImage(pageNumber);
   window.addEventListener("keydown", handleKeyDown);
 });
 
@@ -43,21 +48,6 @@ onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
 });
 
-function navegatePages(direction) {
-  if (direction == "back") {
-    if (count.value > 0) {
-      count.value--;
-      showImage(count);
-    } else {
-      console.log("Você já está na página inicial");
-    }
-  } else if (count.value < arrayData.value.length && direction == "next") {
-    count.value++;
-    showImage(count);
-  } else {
-    console.log("Você já está na última página");
-  }
-}
 </script>
 
 <template>
