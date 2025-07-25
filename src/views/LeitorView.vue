@@ -63,7 +63,7 @@ onUnmounted(() => {
       label="Voltar"
       class="px-4 py-2 bg-orange-500 text-black border-transparent hover:bg-orange-700"
     />
-    <span class="text-lg font-medium mx-3">{{ count + 1 }} / {{ arrayData.length }}</span>
+    <span class="text-lg font-medium mx-3">{{ count + 1 }} / {{ pageData.length }}</span>
     <Button
       @click="navegatePages('next')"
       label="Avançar"
